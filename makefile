@@ -3,7 +3,7 @@ CC=g++
 CFLAGS=-c -Wall
 LDFLAGS=
 
-SOURCES=main.cpp
+SOURCES=main.cpp colony.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 
 EXECUTABLE=gameOfLife
