@@ -7,8 +7,10 @@ See LICENSE*/
 #include "colony.h"
 
 int main(int argc, char** argv) {
-  
-  Colony c(50, 50);
-  std::cout << "Hello World!" << std::endl;
+  // command line args parsing
+
+  Colony c(40, 80);
+  c.printGrid();
+
   return 0;
 }
