@@ -7,9 +7,7 @@ See LICENSE*/
 #include "colony.h"
 
 int main(int argc, char** argv) {
-  // command line args parsing
-
-  Colony c(40, 80);
+  Colony c(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
   c.printGrid();
 
   return 0;

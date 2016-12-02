@@ -18,17 +18,23 @@ class Colony {
     // Dimensions of grid
     int length;
     int width;
+
+    // amount of generations
+    int currentGen;
+    int maxGen;
+
     // initial generation
     int** gen0;
     // grid of current state
     int** currentGrid;
 
-    // Constructor
+    // Constructors
     Colony(int length, int width);
+    Colony(int length, int width, int generations);
     // Destructor
     ~Colony();
     // Checks surrounding cells and determines if cell dies
-    void life(int** grid);
+    void evolve(int** grid);
     // Prints grid of cells
     void printGrid();
 };

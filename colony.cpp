@@ -10,6 +10,33 @@ Colony::Colony(int length, int width) {
   // 2 added for edges of grid
   this->length = length + 2;
   this->width = width + 2;
+  this->currentGen = 0;
+  this->maxGen = 100; // 100 default
+
+  // dynamically initialize 2d array
+  this->gen0 = new int*[this->length];
+  this->currentGrid = new int*[this->length];
+
+  // create columns
+  for(int i = 0; i < this->length; i++) {
+      this->gen0[i] = new int[this->width];
+      this->currentGrid[i] = new int[this->width];
+  }
+  // init values to 0
+  for(int k = 0; k < this->length; k++) {
+    for(int j = 0; j < this->width; j++) {
+      gen0[k][j] = 1;
+      currentGrid[k][j] = 1;
+    }
+  }
+}
+
+Colony::Colony(int length, int width, int generations) {
+  // 2 added for edges of grid
+  this->length = length + 2;
+  this->width = width + 2;
+  this->currentGen = 0;
+  this->maxGen = generations; // 100 default
 
   // dynamically initialize 2d array
   this->gen0 = new int*[this->length];
@@ -40,14 +67,14 @@ Colony::~Colony() {
 
 }
 
-void Colony::life(int** grid) {}
+void Colony::evolve(int** grid) {}
 
 void Colony::printGrid() {
-  /* top border
+  // top border
   for (int k = 0; k < this->width; k++) {
     std::cout << "-";
   }
-  std::cout << std::endl;*/
+  std::cout << std::endl;
 
 
   for(int j = 0; j < this->length; j++) { // ignore first and last lines
@@ -61,11 +88,13 @@ void Colony::printGrid() {
 		std::cout << std::endl;
  	}
 
-  /* Bottom border
+  // Bottom border
   for (int k = 0; k < this->width; k++) {
     std::cout << "-";
   }
-  std::cout << std::endl;*/
+  std::cout << std::endl;
+  std::cout << "Generation: " << this->currentGen << std::endl;
+
 }
 
 int Colony::_getLength(int** grid) {
