@@ -4,6 +4,7 @@ See LICENSE*/
 // Christopher Hernandez
 
 #include <iostream>
+#include <cstdlib>
 #include "colony.h"
 
 Colony::Colony(int length, int width, int generations) {
