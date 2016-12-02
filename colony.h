@@ -14,6 +14,8 @@ class Colony {
     int _getWidth(int** grid);
     // Copies values of original grid into a temporary grid
     void _copyGrid(int** original, int** temp);
+    // Prints horizontl spacer
+    void _printSpacer(int width);
   public:
     // Dimensions of grid
     int length;
@@ -28,15 +30,16 @@ class Colony {
     // grid of current state
     int** currentGrid;
 
-    // Constructors
-    Colony(int length, int width);
+    // Constructor
     Colony(int length, int width, int generations);
     // Destructor
     ~Colony();
     // Checks surrounding cells and determines if cell dies
-    void evolve(int** grid);
+    void evolve();
     // Prints grid of cells
     void printGrid();
+    // Get max number of generations
+    int getMaxGens();
 };
 
 #endif
