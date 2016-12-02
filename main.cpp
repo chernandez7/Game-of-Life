@@ -4,6 +4,7 @@ See LICENSE*/
 // Christopher Hernandez
 
 #include <iostream>
+#include <cstdlib>
 #include "colony.h"
 
 int main(int argc, char** argv) {
