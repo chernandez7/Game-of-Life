@@ -14,7 +14,7 @@ class Colony {
     int _getWidth(int** grid);
     // Copies values of original grid into a temporary grid
     void _copyGrid(int** original, int** temp);
-    // Prints horizontl spacer
+    // Prints horizontal spacer
     void _printSpacer(int width);
   public:
     // Dimensions of grid

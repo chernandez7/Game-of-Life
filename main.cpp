@@ -4,6 +4,7 @@ See LICENSE*/
 // Christopher Hernandez
 
 #include <iostream>
+#include <cstring>
 #include <cstdlib>
 #include "colony.h"
 
