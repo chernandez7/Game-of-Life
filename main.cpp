@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
   _gens = atoi(argv[3]);
   bool print = true;
   if (argv[4]) { // if 4th parameter exists don't print
-    if (std::strncmp(argv[4],"--no-print", 10) == 0) {
+    if (strncmp(argv[4],"--no-print", 10) == 0) {
       print = false;
     }
   }
