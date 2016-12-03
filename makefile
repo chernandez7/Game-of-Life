@@ -1,7 +1,7 @@
 
 CC=g++
 CFLAGS=-c -Wall
-LDFLAGS=-lrt -Wl
+LDFLAGS=-lrt -Wl --no-as-needed
 
 SOURCES=main.cpp colony.cpp my_timer.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
