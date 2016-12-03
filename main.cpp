@@ -6,6 +6,7 @@ See LICENSE*/
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <string.h> 
 #include "colony.h"
 
 int _length;
