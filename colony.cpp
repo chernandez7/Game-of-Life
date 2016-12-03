@@ -56,11 +56,7 @@ void Colony::evolve() {
       temp[k] = new int[this->width];
   }
 
-  std::cout << "Temp initialized" << std::endl;
-
   _copyGrid(this->currentGrid, temp); // move current data to a temp array
-
-  std::cout << "Copied current state into temp" << std::endl;
 
   for(int i = 1; i < this->length - 1; i++) { // foreach cell
     for(int j = 1; j < this->width - 1; j++) {
@@ -94,8 +90,7 @@ void Colony::evolve() {
     }
   }
   _copyGrid(temp, this->currentGrid); // move results back to original
-  std::cout << "Copied results to currentGrid" << std::endl;
-  this->currentGen++;
+  this->currentGen++; // increment generation
 }
 
 void Colony::printGrid() {
@@ -151,7 +146,7 @@ void Colony::_copyGrid(int** original, int** temp) {
 
 void Colony::_printSpacer(int width) {
   for (int k = 0; k < this->width; k++) {
-    std::cout << "-";
+    std::cout << "#";
   }
   std::cout << std::endl;
 }
