@@ -6,7 +6,7 @@ High Performance Computing (COMP 364) Final Project
  - build:
     `make`
  - run:
-    `./gameOfLife <gridLength> <gridWidth> <# of generations>`
+    `./gameOfLife <gridLength> <gridWidth> <# of generations> --no-print (optional)`
 
 ## License ##
  - MIT License

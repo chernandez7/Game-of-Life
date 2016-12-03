@@ -96,8 +96,8 @@ void Colony::evolve() {
        }
 
        clock_t end = clock(); // end gen time
-       double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-       this->times[i][j] = elapsed_secs;
+       double elapsed = double(end - begin) /  CLOCKS_PER_SEC;
+       this->times[i][j] = elapsed;
     }
   }
   _copyGrid(temp, this->currentGrid); // move results back to original
@@ -121,7 +121,7 @@ void Colony::printGrid() {
 
   _printSpacer(this->width);
   std::cout << "Current Generation: " << this->currentGen << std::endl;
-  std::cout << "Max Generations: " << this->maxGen << std::endl;
+  std::cout << "Max Generations: " << this->maxGen - 1 << std::endl;
   std::cout << "Dimensions: " << this->length << "x" << this->width << std::endl;
 }
 
