@@ -5,9 +5,9 @@ See LICENSE*/
 
 #include <iostream>
 #include <cstdlib>
-#include <ctime>
 #include <string.h> 
 #include "colony.h"
+#include "my_timer.h"
 
 int _length;
 int _width;
@@ -24,7 +24,7 @@ double calculateAvgTime(double** times) {
 }
 
 int main(int argc, char** argv) {
-  clock_t begin = clock();
+  myTimer_t t0 = getTimeStamp();
 
   _length = atoi(argv[1]);
   _width = atoi(argv[2]);
@@ -49,9 +49,8 @@ int main(int argc, char** argv) {
     }
   }
 
-  clock_t end = clock(); // end gen time
-  double elapsed = double(end - begin) /  CLOCKS_PER_SEC;
+  double t1 =  getElapsedTime(t0, getTimeStamp()); // end time
   std::cout << "Average timestep: " << calculateAvgTime(c.getTimes()) << std::endl;
-  std::cout << "Total Time: " << elapsed << std::endl;
+  std::cout << "Total Time: " << t1 << std::endl;
   return 0;
 }

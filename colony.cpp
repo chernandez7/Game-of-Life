@@ -5,8 +5,8 @@ See LICENSE*/
 
 #include <iostream>
 #include <cstdlib>
-#include <ctime>
 #include "colony.h"
+#include "my_timer.h"
 
 Colony::Colony(int length, int width, int generations) {
   // 2 added for edges of grid
@@ -65,7 +65,7 @@ void Colony::evolve() {
   for(int i = 1; i < this->length - 1; i++) { // foreach cell
     for(int j = 1; j < this->width - 1; j++) {
       //start timing
-      clock_t begin = clock();
+      myTimer_t t0 = getTimeStamp();
 
       // Using Moore's neighborhood model
 
@@ -75,13 +75,13 @@ void Colony::evolve() {
 
       // Locations relative to each cell
       count = temp[i-1][j] + // Left
-					temp[i-1][j-1] + // Top Left
-					temp[i][j-1] + // Top
-					temp[i+1][j-1] + // Top Right
-					temp[i+1][j] + // Right
-					temp[i+1][j+1] + // Bottom Right
-					temp[i][j+1] + // Bottom
-					temp[i-1][j+1]; // Bottom Left
+	temp[i-1][j-1] + // Top Left
+	temp[i][j-1] + // Top
+	temp[i+1][j-1] + // Top Right
+	temp[i+1][j] + // Right
+	temp[i+1][j+1] + // Bottom Right
+	temp[i][j+1] + // Bottom
+	temp[i-1][j+1]; // Bottom Left
 
       if (count > 3 || count < 2) { // Overpopulation or Loneliness
          temp[i][j] = 0; // Cell dies
@@ -95,9 +95,8 @@ void Colony::evolve() {
          temp[i][j] = 1;
        }
 
-       clock_t end = clock(); // end gen time
-       double elapsed = double(end - begin) /  CLOCKS_PER_SEC;
-       this->times[i][j] = elapsed;
+       double t1 = getElapsedTime(t0, getTimeStamp()); // end gen time
+       this->times[i][j] = t1;
     }
   }
   _copyGrid(temp, this->currentGrid); // move results back to original

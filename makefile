@@ -1,9 +1,9 @@
 
 CC=g++
 CFLAGS=-c -Wall
-LDFLAGS=
+LDFLAGS=-lrt
 
-SOURCES=main.cpp colony.cpp
+SOURCES=main.cpp colony.cpp my_timer.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 
 EXECUTABLE=gameOfLife
