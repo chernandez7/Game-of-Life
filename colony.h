@@ -30,6 +30,9 @@ class Colony {
     // grid of current state
     int** currentGrid;
 
+    // times for each gen
+    double** times;
+
     // Constructor
     Colony(int length, int width, int generations);
     // Destructor
@@ -38,8 +41,8 @@ class Colony {
     void evolve();
     // Prints grid of cells
     void printGrid();
-    // Get max number of generations
-    int getMaxGens();
+    // Get times of get
+    double** getTimes();
 };
 
 #endif

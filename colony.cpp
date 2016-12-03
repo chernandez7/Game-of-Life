@@ -5,6 +5,7 @@ See LICENSE*/
 
 #include <iostream>
 #include <cstdlib>
+#include <ctime>
 #include "colony.h"
 
 Colony::Colony(int length, int width, int generations) {
@@ -17,11 +18,13 @@ Colony::Colony(int length, int width, int generations) {
   // dynamically initialize 2d array
   this->gen0 = new int*[this->length];
   this->currentGrid = new int*[this->length];
+  this->times = new double*[this->length];
 
   // create columns
   for(int i = 0; i < this->length; i++) {
       this->gen0[i] = new int[this->width];
       this->currentGrid[i] = new int[this->width];
+      this->times[i] = new double[this->width];
   }
 
   // random seed
@@ -31,7 +34,7 @@ Colony::Colony(int length, int width, int generations) {
   for(int k = 0; k < this->length; k++) {
     for(int j = 0; j < this->width; j++) {
       gen0[k][j] = rand() % 2;;
-      //currentGrid[k][j] = 0;
+      this->times[k][j] = 0;
     }
   }
   _copyGrid(gen0, currentGrid);
@@ -42,10 +45,11 @@ Colony::~Colony() {
   for(int i = 0; i < this->length; ++i) {
     delete [] this->gen0[i];
     delete [] this->currentGrid[i];
+    delete [] this->times[i];
   }
   delete [] this->gen0;
   delete [] this->currentGrid;
-
+  delete [] this->times;
 }
 
 void Colony::evolve() {
@@ -60,6 +64,9 @@ void Colony::evolve() {
 
   for(int i = 1; i < this->length - 1; i++) { // foreach cell
     for(int j = 1; j < this->width - 1; j++) {
+      //start timing
+      clock_t begin = clock();
+
       // Using Moore's neighborhood model
 
       // 1 being that the cell is alive
@@ -87,6 +94,10 @@ void Colony::evolve() {
        if (count == 3) { // New cell is born
          temp[i][j] = 1;
        }
+
+       clock_t end = clock(); // end gen time
+       double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+       this->times[i][j] = elapsed_secs;
     }
   }
   _copyGrid(temp, this->currentGrid); // move results back to original
@@ -112,11 +123,10 @@ void Colony::printGrid() {
   std::cout << "Current Generation: " << this->currentGen << std::endl;
   std::cout << "Max Generations: " << this->maxGen << std::endl;
   std::cout << "Dimensions: " << this->length << "x" << this->width << std::endl;
-
 }
 
-int Colony::getMaxGens() {
-  return this->maxGen;
+double** Colony::getTimes() {
+  return this->times;
 }
 
 int Colony::_getLength(int** grid) {

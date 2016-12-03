@@ -7,15 +7,34 @@ See LICENSE*/
 #include <cstdlib>
 #include "colony.h"
 
-int main(int argc, char** argv) {
-  Colony c(atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+int _length;
+int _width;
+int _gens;
 
-  for (int i = 0; i < c.getMaxGens(); i++) {
+double calculateAvgTime(double** times) {
+  double total = 0;
+
+  for(int j = 0; j < _length; j++) {
+ 		for(int i = 0; i < _width; i++) {
+      total += times[j][i]; // add up all times
+    }
+  }
+  return total / (_length * _width); // sum / n = avg
+}
+
+int main(int argc, char** argv) {
+  _length = atoi(argv[1]);
+  _width = atoi(argv[2]);
+  _gens = atoi(argv[3]);
+  // Create colony
+  Colony c(_length, _width, _gens);
+
+  for (int i = 0; i < _gens; i++) {
     system("clear"); // clear console
     c.printGrid();
     c.evolve();
     system("sleep .1"); // give console time to catch up
 }
-
+  std::cout << "Average timestep: " << calculateAvgTime(c.getTimes()) << std::endl;
   return 0;
 }
