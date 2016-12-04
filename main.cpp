@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
   }
 
   double t1 =  getElapsedTime(t0, getTimeStamp()); // end time
-  std::cout << "Average timestep: " << calculateAvgTime(c.getTimes()) << std::endl;
-  std::cout << "Total Time: " << t1 << std::endl;
+  std::cout << "Average timestep: " << calculateAvgTime(c.getTimes()) << " ms" << std::endl;
+  std::cout << "Total Time: " << t1 << " ms" << std::endl;
   return 0;
 }
