@@ -30,10 +30,10 @@ Colony::Colony(int length, int width, int generations) {
 
   // init values to 0
   for(int i = 0; i < this->n; i++) {
-      if (rand() % 2) gen0[i] = rand() % 2;
+      if (rand() % 2) this->gen0[i] = rand() % 2;
       this->times[i] = 0;
   }
-  _copyGrid(gen0, currentGrid);
+  this->currentGrid = this->gen0;
 }
 
 Colony::~Colony() {
@@ -50,7 +50,7 @@ void Colony::evolve() {
   _partition_range(0, this->n, size, rank, local_start, local_end);
   // create rows
   int* temp = new int[this->n];
-  temp = this->currentGrid
+  temp = this->currentGrid;
 
   // range[0], width will get all complete rows
   for(int i = local_start; i < local_end; i++) { // foreach cell
@@ -124,7 +124,7 @@ void Colony::_printSpacer(int width) {
   std::cout << std::endl;
 }
 
-int Colony::_partition_range(const int global_start, const int global_end,
+void Colony::_partition_range(const int global_start, const int global_end,
   const int num_partitions, const int rank, int& local_start, int& local_end)
 {
   // Total length of the iteration space.
@@ -138,15 +138,12 @@ int Colony::_partition_range(const int global_start, const int global_end,
 
   // We want to spreader the remainder around evening to the 1st few ranks.
   // ... add one to the simple chunk size for all ranks < remainder.
-  if (rank < remainder)
-  {
+  if (rank < remainder) {
      local_start = global_start + rank * chunk_size + rank;
      local_end   = local_start + chunk_size + 1;
   }
-  else
-  {
+  else {
      local_start = global_start + rank * chunk_size + remainder;
      local_end   = local_start + chunk_size;
   }
-  return 0;
 }

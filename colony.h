@@ -11,7 +11,7 @@ class Colony {
     // Prints horizontal spacer
     void _printSpacer(int width);
     // Defines partition of a node
-    int _partition_range(int global_start, int global_end, int num_partitions,
+    void _partition_range(int global_start, int global_end, int num_partitions,
       int rank, int& local_start, int& local_end);
   public:
     // Dimensions of grid
