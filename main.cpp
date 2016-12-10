@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
 
   _length = atoi(argv[1]);
   _width = atoi(argv[2]);
-  _n = _length * _width
+  _n = _length * _width;
   _gens = atoi(argv[3]);
   bool print = true;
   if (argv[4]) { // if 4th parameter exists don't print
@@ -52,8 +52,7 @@ int main(int argc, char** argv) {
 
   for (int i = 0; i < _gens; i++) {
     if (print) {
-      if(system("clear") == NULL)
-        std::cerr << "could not clear console";
+      if(system("clear"))
       if (rank == 0) { // only 1 output
         c.printGrid();
       }
