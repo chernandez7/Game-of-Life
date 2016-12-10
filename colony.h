@@ -8,32 +8,28 @@ See LICENSE*/
 
 class Colony {
   private:
-    // get length of grid
-    int _getLength(int** grid);
-    // get width of grid
-    int _getWidth(int** grid);
-    // Copies values of original grid into a temporary grid
-    void _copyGrid(int** original, int** temp);
     // Prints horizontal spacer
     void _printSpacer(int width);
-    int* _partition_range(const int global_start, const int global_end,
-                          const int num_partitions, const int rank);
+    // Defines partition of a node
+    int _partition_range(int global_start, int global_end, int num_partitions,
+      int rank, int& local_start, int& local_end);
   public:
     // Dimensions of grid
     int length;
     int width;
+    int n;
 
     // amount of generations
     int currentGen;
     int maxGen;
 
     // initial generation
-    int** gen0;
+    int* gen0;
     // grid of current state
-    int** currentGrid;
+    int* currentGrid;
 
     // times for each gen
-    double** times;
+    double* times;
 
     // Constructor
     Colony(int length, int width, int generations);
@@ -44,7 +40,7 @@ class Colony {
     // Prints grid of cells
     void printGrid();
     // Get times of get
-    double** getTimes();
+    double* getTimes();
 };
 
 #endif

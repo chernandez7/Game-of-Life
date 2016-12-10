@@ -1,6 +1,6 @@
 
 CC=mpicxx
-CFLAGS=-c -Wall -O3 -I.
+CFLAGS=-c -Wall -O3 -I. -Wno-unused-result
 LDFLAGS=
 LDADD=-lrt
 
