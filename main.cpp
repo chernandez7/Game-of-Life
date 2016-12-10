@@ -52,9 +52,9 @@ int main(int argc, char** argv) {
 
   for (int i = 0; i < _gens; i++) {
     if (print) {
-      if(system("clear"))
       if (rank == 0) { // only 1 output
-        c.printGrid();
+        system("clear");
+	c.printGrid();
       }
       c.evolve();
     } else {
@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
   double t1 =  getElapsedTime(t0, getTimeStamp()); // end time
   if (rank == 0) {
     std::cout << "Average timestep: " << calculateAvgTime(c.getTimes()) << " ms" << std::endl;
-    std::cout << "Total Time: " << t1 << " ms" << std::endl;
+    std::cout << "Total Time: " << t1 << " s" << std::endl;
   }
   // End MPI
   callMPI( MPI_Finalize() );
