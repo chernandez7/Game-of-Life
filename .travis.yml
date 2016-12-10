@@ -1,13 +1,11 @@
-{
-  language: "c++",
-  compiler: "gcc",
-  "addons": {
-    "apt": {
-      "packages": [
-        "libopenmpi-dev"
-        ]
-      }
-    },
-  script:
-    - make
-}
+
+language: "c++",
+compiler: "gcc",
+addons: {
+  apt: {
+    packages: [
+      "libopenmpi-dev"
+    ]
+  }
+},
+script: make
