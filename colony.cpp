@@ -30,7 +30,7 @@ Colony::Colony(int length, int width, int generations) {
 
   // init values to 0
   for(int i = 0; i < this->n; i++) {
-      if (rand() % 2) this->gen0[i] = rand() % 2;
+      this->gen0[i] = rand() % 2;
       this->times[i] = 0;
   }
   this->currentGrid = this->gen0;
@@ -93,6 +93,11 @@ void Colony::evolve() {
 }
 
 void Colony::printGrid() {
+  int rank, size, local_start, local_end;
+  callMPI( MPI_Comm_rank(MPI_COMM_WORLD, &rank) );
+  callMPI( MPI_Comm_size(MPI_COMM_WORLD, &size) );
+  _partition_range(0, this->n, size, rank, local_start, local_end);
+
   // top border
   _printSpacer(this->width);
 
@@ -111,6 +116,8 @@ void Colony::printGrid() {
   std::cout << "Current Generation: " << this->currentGen << std::endl;
   std::cout << "Max Generations: " << this->maxGen - 1 << std::endl;
   std::cout << "Dimensions: " << this->length << "x" << this->width << std::endl;
+  std::cout << "MPI Rank: " << rank << "/" << size << std::endl;
+  std::cout << "MPI Partition: " << local_start << "-" << local_end << std::endl;
 }
 
 double* Colony::getTimes() {

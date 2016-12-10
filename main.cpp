@@ -64,7 +64,11 @@ int main(int argc, char** argv) {
 
   double t1 =  getElapsedTime(t0, getTimeStamp()); // end time
   if (rank == 0) {
-    std::cout << "Average timestep: " << calculateAvgTime(c.getTimes()) << " ms" << std::endl;
+    // Gather all times for each node
+    double* times = new double[_n];
+    callMPI( MPI_Allgather( c.getTimes(), _n, MPI_DOUBLE, times, _n, MPI_DOUBLE, MPI_COMM_WORLD);  );
+
+    std::cout << "Average timestep: " << calculateAvgTime(times) << " ms" << std::endl;
     std::cout << "Total Time: " << t1 << " s" << std::endl;
     std::cout << "Nodes used: " << size << std::endl;
   }
