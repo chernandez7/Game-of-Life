@@ -5,9 +5,12 @@ See LICENSE*/
 
 #include <iostream>
 #include <cstdlib>
-#include <string.h> 
+#include <string.h>
+#include <mpi.h>
+
 #include "colony.h"
 #include "my_timer.h"
+#include "my_mpi_header.h"
 
 int _length;
 int _width;
@@ -23,7 +26,45 @@ double calculateAvgTime(double** times) {
   return total / (_length * _width); // sum / n = avg
 }
 
+int partition_range (const int global_start, const int global_end,
+                     const int num_partitions, const int rank,
+                     int& local_start, int& local_end) {
+   // Total length of the iteration space.
+   const int global_length = global_end - global_start;
+
+   // Simple per-partition size ignoring remainder.
+   const int chunk_size = global_length / num_partitions;
+
+   // And now the remainder.
+   const int remainder = global_length - chunk_size * num_partitions;
+
+   // We want to spreader the remainder around evening to the 1st few ranks.
+   // ... add one to the simple chunk size for all ranks < remainder.
+   if (rank < remainder)
+   {
+      local_start = global_start + rank * chunk_size + rank;
+      local_end   = local_start + chunk_size + 1;
+   }
+   else
+   {
+      local_start = global_start + rank * chunk_size + remainder;
+      local_end   = local_start + chunk_size;
+   }
+
+   return 0;
+}
+
+
 int main(int argc, char** argv) {
+  callMPI( MPI_Init(&argc, &argv) );
+
+  int rank, size;
+  callMPI( MPI_Comm_rank(MPI_COMM_WORLD, &rank) );
+  callMPI( MPI_Comm_size(MPI_COMM_WORLD, &size) );
+
+  //int local_start, local_end;
+  //callMPI( partition_range(0, n, size, rank, local_start, local_end) );
+
   myTimer_t t0 = getTimeStamp();
 
   _length = atoi(argv[1]);
@@ -52,5 +93,7 @@ int main(int argc, char** argv) {
   double t1 =  getElapsedTime(t0, getTimeStamp()); // end time
   std::cout << "Average timestep: " << calculateAvgTime(c.getTimes()) << " ms" << std::endl;
   std::cout << "Total Time: " << t1 << " ms" << std::endl;
+
+  callMPI( MPI_Finalize() );
   return 0;
 }
