@@ -13,6 +13,7 @@ High Performance Computing (COMP 364) Final Project built using the [Stampede Su
     `./gameOfLife <gridLength> <gridWidth> <# of generations> --no-print (optional)`
 - running with MPI:
     `ibrun -n <number of processing nodes> -o 0 ./gameOfLife <gridLength> <gridWidth> <# of generations> --no-print (optional)`
-
+- running slurm script:
+	`sbatch slurm.script`
 ## License ##
  - MIT License

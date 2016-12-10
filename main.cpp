@@ -66,6 +66,7 @@ int main(int argc, char** argv) {
   if (rank == 0) {
     std::cout << "Average timestep: " << calculateAvgTime(c.getTimes()) << " ms" << std::endl;
     std::cout << "Total Time: " << t1 << " s" << std::endl;
+    std::cout << "Nodes used: " << size << std::endl;
   }
   // End MPI
   callMPI( MPI_Finalize() );

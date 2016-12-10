@@ -32,3 +32,9 @@
 *.out
 *.app
 gameOfLife
+
+# Slurm
+slurm.script
+
+# Generated Outputs
+gameOfLife.*
