@@ -5,8 +5,11 @@ See LICENSE*/
 
 #include <iostream>
 #include <cstdlib>
+#include <mpi.h>
+
 #include "colony.h"
 #include "my_timer.h"
+#include "my_mpi_header.h"
 
 Colony::Colony(int length, int width, int generations) {
   // 2 added for edges of grid
@@ -52,7 +55,15 @@ Colony::~Colony() {
   delete [] this->times;
 }
 
+int* Colony::_partition_range (const int global_start, const int global_end,
+                     const int num_partitions, const int rank);
+
 void Colony::evolve() {
+  int rank, size, local_start, local_end;
+  callMPI( MPI_Comm_rank(MPI_COMM_WORLD, &rank) );
+  callMPI( MPI_Comm_size(MPI_COMM_WORLD, &size) );
+
+  // create rows
   int** temp = new int*[this->length];
 
   // create columns
@@ -60,9 +71,21 @@ void Colony::evolve() {
       temp[k] = new int[this->width];
   }
 
-  _copyGrid(this->currentGrid, temp); // move current data to a temp array
+  // move current data to a temp array
+  _copyGrid(this->currentGrid, temp);
 
-  for(int i = 1; i < this->length - 1; i++) { // foreach cell
+  int* range;
+  /* create array to hold ranges
+  // 0: amount of complete rows
+  // 1: remainder of incomplete rows
+  //
+  // Ex. if n is 100 and size is 2
+  // rank 0 gets 50, rank 1 gets 50
+  */
+  range = partition_range(0, this->length * this->width, size, rank);
+
+  // range[0], width will get all complete rows
+  for(int i = 1; i < range[0] - 1; i++) { // foreach cell
     for(int j = 1; j < this->width - 1; j++) {
       //start timing
       myTimer_t t0 = getTimeStamp();
@@ -75,13 +98,13 @@ void Colony::evolve() {
 
       // Locations relative to each cell
       count = temp[i-1][j] + // Left
-	temp[i-1][j-1] + // Top Left
-	temp[i][j-1] + // Top
-	temp[i+1][j-1] + // Top Right
-	temp[i+1][j] + // Right
-	temp[i+1][j+1] + // Bottom Right
-	temp[i][j+1] + // Bottom
-	temp[i-1][j+1]; // Bottom Left
+      	temp[i-1][j-1] + // Top Left
+      	temp[i][j-1] + // Top
+      	temp[i+1][j-1] + // Top Right
+      	temp[i+1][j] + // Right
+      	temp[i+1][j+1] + // Bottom Right
+      	temp[i][j+1] + // Bottom
+      	temp[i-1][j+1]; // Bottom Left
 
       if (count > 3 || count < 2) { // Overpopulation or Loneliness
          temp[i][j] = 0; // Cell dies
@@ -99,6 +122,44 @@ void Colony::evolve() {
        this->times[i][j] = t1;
     }
   }
+
+  // Remainder line
+  for (int l = 0; l < range[1] - 1; l++) {
+    //start timing
+    myTimer_t t0 = getTimeStamp();
+
+    // Using Moore's neighborhood model
+
+    // 1 being that the cell is alive
+    // 0 being that the cell is dead
+    int count = 0; // cell's "value"
+
+    // Locations relative to each cell
+    count = temp[i-1][j] + // Left
+      temp[i-1][j-1] + // Top Left
+      temp[i][j-1] + // Top
+      temp[i+1][j-1] + // Top Right
+      temp[i+1][j] + // Right
+      temp[i+1][j+1] + // Bottom Right
+      temp[i][j+1] + // Bottom
+      temp[i-1][j+1]; // Bottom Left
+
+    if (count > 3 || count < 2) { // Overpopulation or Loneliness
+       temp[i][j] = 0; // Cell dies
+     }
+
+     if (count == 2) { // Cell stays the same
+       temp[i][j] = this->currentGrid[i][j];
+     }
+
+     if (count == 3) { // New cell is born
+       temp[i][j] = 1;
+     }
+
+    double t1 = getElapsedTime(t0, getTimeStamp()); // end gen time
+    this->times[range[0]][l] = t1;
+  }
+
   _copyGrid(temp, this->currentGrid); // move results back to original
   this->currentGen++; // increment generation
 }
@@ -158,4 +219,30 @@ void Colony::_printSpacer(int width) {
     std::cout << "#";
   }
   std::cout << std::endl;
+}
+
+int* Colony::_partition_range(const int global_start, const int global_end,
+                     const int num_partitions, const int rank) {
+  int* temp = new int[2];
+
+   // Total length of the iteration space.
+   const int global_length = global_end - global_start;
+
+   // Simple per-partition size ignoring remainder.
+   const int chunk_size = global_length / num_partitions;
+
+   // And now the remainder.
+   const int remainder = global_length - chunk_size * num_partitions;
+
+   // We want to spreader the remainder around evening to the 1st few ranks.
+   // ... add one to the simple chunk size for all ranks < remainder.
+   if (rank < remainder) {
+      temp[0]   = global_start + rank * chunk_size + rank;
+      temp[1]   = local_start + chunk_size + 1;
+   } else {
+      temp[0]   = global_start + rank * chunk_size + remainder;
+      temp[1]   = local_start + chunk_size;
+   }
+   std::cout << "rank " << rank << ": " << temp[0] << " " << temp[1] << std::endl;
+   return temp;
 }

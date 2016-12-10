@@ -16,6 +16,8 @@ class Colony {
     void _copyGrid(int** original, int** temp);
     // Prints horizontal spacer
     void _printSpacer(int width);
+    int* _partition_range(const int global_start, const int global_end,
+                          const int num_partitions, const int rank);
   public:
     // Dimensions of grid
     int length;
