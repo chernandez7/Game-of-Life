@@ -30,5 +30,10 @@ High Performance Computing (COMP 364) Final Project built using the [Stampede Su
 
     `sbatch slurm.script`
 
+## Results ##
+![Alt Text](https://i.imgur.com/cs6eBEK.png)
+
+![Alt Text](https://i.imgur.com/QSCTBt7.png)
+
 ## License ##
  - MIT License
